@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single"
+        android:enabled="true">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="@string/menu_home" />
+    </group>
+
+    <item android:title="Payment" android:id="@+id/nav_menu_payment"
+        android:visible="false">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
+                <item
+                    android:id="@+id/nav_payment"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_payment"
+                    android:visible="true" />
+                <item
+                    android:id="@+id/nav_my_prompt"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_my_prompt"
+                    android:visible="true" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="About Us">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
+                <item
+                    android:id="@+id/nav_about_us"
+                    android:icon="@android:drawable/ic_menu_myplaces"
+                    android:title="@string/menu_about_us" />
+            </group>
+        </menu>
+    </item>
+
+</menu>
