@@ -22,10 +22,11 @@ object AuthService {
         val requestBody = jsonBody.toString()
 
         val loginRequest = object: JsonObjectRequest(Method.POST, URL_LOGIN, null, Response.Listener { response ->
-
             try {
-                App.prefs.userEmail = response.getString("user")
-                App.prefs.authToken = response.getString("token")
+                App.prefs.userEmail = response.getJSONObject("data").getJSONObject("user").getString("username")
+                App.prefs.authToken = response.getJSONObject("data").getString("accessToken")
+                //App.prefs.userEmail = response.getString("user")
+                //App.prefs.authToken = response.getString("token")
                 App.prefs.isLoggedIn = true
                 complete(true)
             } catch (e: JSONException) {
@@ -55,13 +56,16 @@ object AuthService {
         val findUserRequest = object: JsonObjectRequest(Method.GET, "$URL_GET_USER${App.prefs.userEmail}", null, Response.Listener { response ->
 
             try {
-                UserDataService.name = response.getString("name")
-                UserDataService.email = response.getString("email")
+                UserDataService.name = response.getJSONObject("data").getString("username")
+                UserDataService.email = response.getJSONObject("data").getString("email")
+                UserDataService.id = response.getJSONObject("data").getString("id")
+                //UserDataService.name = response.getString("name")
+                //UserDataService.email = response.getString("email")
                 //UserDataService.avatarName = response.getString("avatarName")
                 //UserDataService.avatarColor = response.getString("avatarColor")
                 UserDataService.avatarName = "dark19"
                 UserDataService.avatarColor = "[0.9647058823529412, 0.9647058823529412, 0.9647058823529412]"
-                UserDataService.id = response.getString("_id")
+                //UserDataService.id = response.getString("_id")
 
                 val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
                 LocalBroadcastManager.getInstance(context).sendBroadcast(userDataChange)

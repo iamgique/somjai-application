@@ -1,6 +1,7 @@
 package com.digitalacademy.somjai.ui.payment
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.digitalacademy.somjai.R
 import com.digitalacademy.somjai.service.GenerateQR
+import com.digitalacademy.somjai.service.PaymentDataService
 import kotlinx.android.synthetic.main.fragment_payment.*
 
 class PaymentFragment : Fragment(), View.OnClickListener {
@@ -45,14 +47,17 @@ class PaymentFragment : Fragment(), View.OnClickListener {
         val ref = refTxt.text.toString()
 
         when(view.id) {
-            R.id.generatePaymentBtn -> generatePayment(amount, ref){ generateSuccess ->
-                if(generateSuccess) {
-                    // CALL TO SERVER
-
-                    // QR String
-                    val bitmap = GenerateQR.generate("000201010212304701159784459346017370210REFERENCE10310REFERENCE25204701153037645406100.005802TH5922TestMerchant15919538816007BANGKOK62370523202008131133335920000000706SCBBBB6304D992")
-                    qrCodeView.setImageBitmap(bitmap)
-                    enableSpinner(false)
+            R.id.generatePaymentBtn -> checkGeneratePayment(amount, ref){ canGenerate ->
+                if(canGenerate) {
+                    GenerateQR.getQRCode(amount, ref) { generateSuccess ->
+                        if(generateSuccess) {
+                            // QR String
+                            qrCodeView.setImageBitmap(PaymentDataService.qrPayment)
+                            enableSpinner(false)
+                        } else {
+                            errorToast()
+                        }
+                    }
                 } else {
                     errorToast()
                 }
@@ -61,9 +66,14 @@ class PaymentFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun generatePayment(amount: String, ref: String, complete: (Boolean) -> Unit) {
+    private fun checkGeneratePayment(amount: String, ref: String, complete: (Boolean) -> Unit) {
         if(amount.isNotEmpty() && ref.isNotEmpty()) {
             convertAmountTo2DecimalString(amount)
+            amountTxt.isEnabled = false
+            refTxt.isEnabled = false
+            generatePaymentBtn.isEnabled = false
+            generatePaymentBtn.isClickable = false
+            generatePaymentBtn.setBackgroundColor(Color.parseColor("#666666"))
             complete(true)
         } else {
             println("Make sure user name, email, and password are filled in.")
