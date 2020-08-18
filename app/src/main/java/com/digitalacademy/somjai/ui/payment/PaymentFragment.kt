@@ -51,7 +51,6 @@ class PaymentFragment : Fragment(), View.OnClickListener {
                 if(canGenerate) {
                     GenerateQR.getQRCode(amount, ref) { generateSuccess ->
                         if(generateSuccess) {
-                            // QR String
                             qrCodeView.setImageBitmap(PaymentDataService.qrPayment)
                             enableSpinner(false)
                         } else {

@@ -1,16 +1,21 @@
 package com.digitalacademy.somjai.controller
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -34,6 +39,8 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
+    private val TAG = "Permission"
+    private val RECORD_REQUEST_CODE = 101
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -64,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         if(App.prefs.isLoggedIn) {
             AuthService.findUserByEmail(this) {}
         }
+        setupPermissions()
     }
 
     override fun onRestart() {
@@ -103,6 +111,9 @@ class MainActivity : AppCompatActivity() {
                 for (menuItemIndex in 0 until menu.size()) {
                     val menuItem: MenuItem = menu.getItem(menuItemIndex)
                     if(menuItem.getItemId() === R.id.nav_menu_payment) {
+                        menuItem.isVisible = true
+                    }
+                    if(menuItem.getItemId() === R.id.nav_menu_verification) {
                         menuItem.isVisible = true
                     }
                     /*if (menuItem.getItemId() === R.id.nav_payment) {
@@ -148,6 +159,9 @@ class MainActivity : AppCompatActivity() {
                 if(menuItem.getItemId() === R.id.nav_menu_payment) {
                     menuItem.isVisible = false
                 }
+                if(menuItem.getItemId() === R.id.nav_menu_verification) {
+                    menuItem.isVisible = false
+                }
                 /*if (menuItem.getItemId() === R.id.nav_payment) {
                     menuItem.setVisible(false)
                 }
@@ -160,6 +174,32 @@ class MainActivity : AppCompatActivity() {
         } else {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
+        }
+    }
+
+    private fun setupPermissions() {
+        makeRequest()
+        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission to record denied")
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), RECORD_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            RECORD_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Permission has been denied by user")
+                } else {
+                    Log.i(TAG, "Permission has been granted by user")
+                }
+            }
         }
     }
 }

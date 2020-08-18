@@ -6,4 +6,5 @@ import android.graphics.BitmapFactory
 
 object PaymentDataService {
     var qrPayment = BitmapFactory.decodeResource(null, R.id.background)
+    var rawSlipVerificationText = ""
 }

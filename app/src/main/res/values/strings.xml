@@ -12,5 +12,6 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_payment">Payment (QR 30)</string>
     <string name="menu_my_prompt">MyPrompt QR</string>
+    <string name="menu_slip_verification">Slip Verification</string>
     <string name="menu_about_us">About Us</string>
 </resources>

@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_payment" />
 
     <fragment
+        android:id="@+id/nav_slip_verification"
+        android:name="com.digitalacademy.somjai.ui.verification.SlipVerificationFragment"
+        android:label="@string/menu_slip_verification"
+        tools:layout="@layout/fragment_slip_verification" />
+
+    <fragment
         android:id="@+id/nav_about_us"
         android:name="com.digitalacademy.somjai.ui.aboutUs.AboutUsFragment"
         android:label="@string/menu_about_us"

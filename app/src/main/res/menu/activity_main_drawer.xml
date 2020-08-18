@@ -32,6 +32,21 @@
         </menu>
     </item>
 
+    <item android:title="Verification" android:id="@+id/nav_menu_verification"
+        android:visible="false">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
+                <item
+                    android:id="@+id/nav_slip_verification"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_slip_verification"
+                    android:visible="true" />
+            </group>
+        </menu>
+    </item>
+
     <item android:title="About Us">
         <menu>
             <group
