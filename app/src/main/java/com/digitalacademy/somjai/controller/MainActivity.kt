@@ -1,17 +1,17 @@
 package com.digitalacademy.somjai.controller
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.AlertDialog
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -25,12 +25,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.digitalacademy.somjai.R
+import com.digitalacademy.somjai.model.SlipVerificationModel
 import com.digitalacademy.somjai.service.AuthService
 import com.digitalacademy.somjai.service.UserDataService
 import com.digitalacademy.somjai.util.BROADCAST_USER_DATA_CHANGE
 import com.digitalacademy.somjai.util.SOCKET_URL
+import com.digitalacademy.somjai.util.SUBSCRIBE_PAYMENT_SUCCEED
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import io.socket.client.IO
+import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -59,10 +63,14 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_home,
             R.id.nav_payment,
             R.id.nav_my_prompt,
+            R.id.nav_slip_verification,
             R.id.nav_about_us
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        socket.connect()
+        socket.on(SUBSCRIBE_PAYMENT_SUCCEED, onPaymentSucceed)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
             IntentFilter(BROADCAST_USER_DATA_CHANGE)
@@ -94,6 +102,65 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    private val onPaymentSucceed = Emitter.Listener { args ->
+        if (App.prefs.isLoggedIn) {
+            runOnUiThread {
+                if(args != null) {
+                    var gson = Gson()
+                    var resp = gson?.fromJson(args[0].toString(), SlipVerificationModel.SlipVerificationInfo::class.java)
+                    Log.d("onPaymentSucceed", resp.toString())
+
+                    val builder: AlertDialog.Builder? = this.let { AlertDialog.Builder(it) }
+                    builder?.setMessage(
+                            Html.fromHtml("<b>Slip Verification Info</b><br />" +
+                                    "<b>Payee</b><br />" +
+                                    "<b>Proxy Id</b>: ${resp.payeeProxyId}<br />" +
+                                    "<b>Proxy Type</b>: ${resp.payeeProxyType}<br />" +
+                                    "<b>Account Number</b>: ${resp.payeeAccountNumber}<br />" +
+                                    "<b>Name</b>: ${resp.payeeName}<br />" +
+                                    "<br />" +
+                                    "<b>Payer</b><br />" +
+                                    "<b>Proxy Id</b>: ${resp.payerProxyId}<br />" +
+                                    "<b>Proxy Type</b>: ${resp.payerProxyType}<br />" +
+                                    "<b>Account Number</b>: ${resp.payerAccountNumber}<br />" +
+                                    "<b>Name</b>: ${resp.payerName}<br />" +
+                                    "<br />" +
+                                    "<b>Sending Bank Code</b></b>: ${resp.sendingBankCode}<br />" +
+                                    "<b>Receiving Bank Code</b>: ${resp.receivingBankCode}<br />" +
+                                    "<b>Amount</b>: ${resp.amount}<br />" +
+                                    "<b>Channel Code</b>: ${resp.channelCode}<br />" +
+                                    "<b>Currency Code</b>: ${resp.currencyCode}<br />" +
+                                    "<br />" +
+                                    "<b>Transaction</b><br />" +
+                                    "<b>Id</b>: ${resp.transactionId}<br />" +
+                                    "<b>Date and Time</b>: ${resp.transactionDateandTime}<br />" +
+                                    "<b>Type</b>: ${resp.transactionType}<br />" +
+                                    "<br />" +
+                                    "<b>Bill Payment Ref</b><br />" +
+                                    "<b>Ref1</b>: ${resp.billPaymentRef1}<br />" +
+                                    "<b>Ref2</b>: ${resp.billPaymentRef2}<br />" +
+                                    "<b>Ref3</b>: ${resp.billPaymentRef3}<br />"
+                                ))
+                        ?.setTitle(Html.fromHtml("<b>Payment Succeed</b>"))
+                    builder?.setPositiveButton("OK", null)
+
+                    val dialog: AlertDialog? = builder?.create()
+                    dialog!!.show()
+
+                    val button = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    val textMessageView = dialog.findViewById<View>(android.R.id.message) as TextView
+                    button.setTextColor(Color.WHITE)
+                    button.setBackgroundColor(Color.DKGRAY)
+                    textMessageView.textSize = 16f
+                }
+                //val newChannel = Channel(channelName, channelDescription, channelId)
+                //MessageService.channels.add(newChannel)
+                //channelAdapter.notifyDataSetChanged()
+            }
+        }
+
+    }
+
     private val userDataChangeReceiver = object: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (App.prefs.isLoggedIn) {
@@ -116,12 +183,6 @@ class MainActivity : AppCompatActivity() {
                     if(menuItem.getItemId() === R.id.nav_menu_verification) {
                         menuItem.isVisible = true
                     }
-                    /*if (menuItem.getItemId() === R.id.nav_payment) {
-                        menuItem.setVisible(true)
-                    }
-                    if (menuItem.getItemId() === R.id.nav_my_prompt) {
-                        menuItem.setVisible(true)
-                    }*/
                 }
             }
         }
@@ -162,12 +223,6 @@ class MainActivity : AppCompatActivity() {
                 if(menuItem.getItemId() === R.id.nav_menu_verification) {
                     menuItem.isVisible = false
                 }
-                /*if (menuItem.getItemId() === R.id.nav_payment) {
-                    menuItem.setVisible(false)
-                }
-                if (menuItem.getItemId() === R.id.nav_my_prompt) {
-                    menuItem.setVisible(false)
-                }*/
             }
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)

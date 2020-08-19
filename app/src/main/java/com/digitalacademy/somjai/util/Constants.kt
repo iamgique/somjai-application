@@ -11,4 +11,5 @@ const val URL_LOGIN = "http://192.168.1.104:3005/v1/account/login"
 const val URL_GET_USER = "http://192.168.1.104:3005/v1/user/byEmail/"
 */
 
+const val SUBSCRIBE_PAYMENT_SUCCEED = "payment-succeed"
 const val BROADCAST_USER_DATA_CHANGE = "BROADCAST_USER_DATA_CHANGE"
