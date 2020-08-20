@@ -25,7 +25,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.digitalacademy.somjai.R
-import com.digitalacademy.somjai.model.SlipVerificationModel
+import com.digitalacademy.somjai.model.PaymentConfirmModel
 import com.digitalacademy.somjai.service.AuthService
 import com.digitalacademy.somjai.service.UserDataService
 import com.digitalacademy.somjai.util.BROADCAST_USER_DATA_CHANGE
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 if(args != null) {
                     var gson = Gson()
-                    var resp = gson?.fromJson(args[0].toString(), SlipVerificationModel.SlipVerificationInfo::class.java)
+                    var resp = gson?.fromJson(args[0].toString(), PaymentConfirmModel.PaymentConfirmInfo::class.java)
                     Log.d("onPaymentSucceed", resp.toString())
 
                     val builder: AlertDialog.Builder? = this.let { AlertDialog.Builder(it) }
@@ -153,9 +153,6 @@ class MainActivity : AppCompatActivity() {
                     button.setBackgroundColor(Color.DKGRAY)
                     textMessageView.textSize = 16f
                 }
-                //val newChannel = Channel(channelName, channelDescription, channelId)
-                //MessageService.channels.add(newChannel)
-                //channelAdapter.notifyDataSetChanged()
             }
         }
 
@@ -204,8 +201,6 @@ class MainActivity : AppCompatActivity() {
     fun loginBtnNavClicked(view: View) {
         if(App.prefs.isLoggedIn) {
             UserDataService.logout()
-            //channelAdapter.notifyDataSetChanged()
-            //messageAdapter.notifyDataSetChanged()
             userNameNavHeader.text = ""
             userEmailNavHeader.text = ""
             userImageNavHeader.setImageResource(R.drawable.profiledefault)
@@ -235,7 +230,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupPermissions() {
         makeRequest()
         val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-
         if (permission != PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "Permission to record denied")
             makeRequest()

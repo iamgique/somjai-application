@@ -12,7 +12,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import org.json.JSONException
 import org.json.JSONObject
 
-object GenerateQR {
+object GenerateQRService {
 
     fun getQRCode(amount: String, ref: String, complete: (Boolean) -> Unit) {
         val jsonBody = JSONObject()

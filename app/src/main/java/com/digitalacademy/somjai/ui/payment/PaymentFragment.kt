@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.digitalacademy.somjai.R
-import com.digitalacademy.somjai.service.GenerateQR
+import com.digitalacademy.somjai.service.GenerateQRService
 import com.digitalacademy.somjai.service.PaymentDataService
 import kotlinx.android.synthetic.main.fragment_payment.*
 
@@ -49,7 +49,7 @@ class PaymentFragment : Fragment(), View.OnClickListener {
         when(view.id) {
             R.id.generatePaymentBtn -> checkGeneratePayment(amount, ref){ canGenerate ->
                 if(canGenerate) {
-                    GenerateQR.getQRCode(amount, ref) { generateSuccess ->
+                    GenerateQRService.getQRCode(amount, ref) { generateSuccess ->
                         if(generateSuccess) {
                             qrCodeView.setImageBitmap(PaymentDataService.qrPayment)
                             enableSpinner(false)

@@ -25,8 +25,6 @@ object AuthService {
             try {
                 App.prefs.userEmail = response.getJSONObject("data").getJSONObject("user").getString("username")
                 App.prefs.authToken = response.getJSONObject("data").getString("accessToken")
-                //App.prefs.userEmail = response.getString("user")
-                //App.prefs.authToken = response.getString("token")
                 App.prefs.isLoggedIn = true
                 complete(true)
             } catch (e: JSONException) {
@@ -35,7 +33,6 @@ object AuthService {
             }
 
         }, Response.ErrorListener { error ->
-            // this is where we deal with our error
             Log.d("ERROR", "Could not login user: $error")
             complete(false)
         }) {
@@ -59,13 +56,8 @@ object AuthService {
                 UserDataService.name = response.getJSONObject("data").getString("username")
                 UserDataService.email = response.getJSONObject("data").getString("email")
                 UserDataService.id = response.getJSONObject("data").getString("id")
-                //UserDataService.name = response.getString("name")
-                //UserDataService.email = response.getString("email")
-                //UserDataService.avatarName = response.getString("avatarName")
-                //UserDataService.avatarColor = response.getString("avatarColor")
                 UserDataService.avatarName = "dark19"
                 UserDataService.avatarColor = "[0.9647058823529412, 0.9647058823529412, 0.9647058823529412]"
-                //UserDataService.id = response.getString("_id")
 
                 val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
                 LocalBroadcastManager.getInstance(context).sendBroadcast(userDataChange)

@@ -2,16 +2,24 @@ package com.digitalacademy.somjai.controller
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.digitalacademy.somjai.R
 import com.digitalacademy.somjai.service.PaymentDataService
+import com.digitalacademy.somjai.service.SlipVerificationDataService
 import com.digitalacademy.somjai.service.SlipVerificationService
 import kotlinx.android.synthetic.main.activity_slip_verification.*
 
 class SlipVerificationActivity : AppCompatActivity() {
+
+    lateinit var slipVerificationAdapter: ArrayAdapter<String>
+    //lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +27,49 @@ class SlipVerificationActivity : AppCompatActivity() {
         slipVerificationSpinner.visibility = View.INVISIBLE
 
         val rawSlip : String = PaymentDataService.rawSlipVerificationText
-        rawSlipVerificationTxt.text = rawSlip
 
         SlipVerificationService.slipVerification(rawSlip) {success ->
             if(success) {
                 // show data
+                var list = ArrayList<String>()
+                list.add("Payment Success")
+                list.add("Trans Ref: " + SlipVerificationDataService.transRef)
+                list.add("Sending Bank: " + SlipVerificationDataService.sendingBank)
+                list.add("Receiving Bank: " + SlipVerificationDataService.receivingBank)
+                list.add("Trans Date: " + SlipVerificationDataService.transDate)
+                list.add("Trans Time: " + SlipVerificationDataService.transTime)
+                list.add("")
+                list.add("Sender")
+                list.add("Display Name: " + SlipVerificationDataService.senderDisplayName)
+                list.add("Name: " + SlipVerificationDataService.senderName)
+                list.add("Proxy Type: " + SlipVerificationDataService.senderProxyType)
+                list.add("Proxy Value: " + SlipVerificationDataService.senderProxyValue)
+                list.add("Account Type: " + SlipVerificationDataService.senderAccountType)
+                list.add("Account Value: " + SlipVerificationDataService.senderAccountValue)
+                list.add("")
+                list.add("Receiver")
+                list.add("Display Name: " + SlipVerificationDataService.receiverDisplayName)
+                list.add("Name: " + SlipVerificationDataService.receiverName)
+                list.add("Proxy Type: " + SlipVerificationDataService.receiverProxyType)
+                list.add("Proxy Value: " + SlipVerificationDataService.receiverProxyValue)
+                list.add("Account Type: " + SlipVerificationDataService.receiverAccountType)
+                list.add("Account Value: " + SlipVerificationDataService.receiverAccountValue)
+                list.add("")
+                list.add("Amount: " + SlipVerificationDataService.amount)
+                list.add("Paid Local Amount: " + SlipVerificationDataService.paidLocalAmount)
+                list.add("Paid Local Currency: " + SlipVerificationDataService.paidLocalCurrency)
+                list.add("")
+                list.add("Reference")
+                list.add("Ref1: " + SlipVerificationDataService.ref1)
+                list.add("Ref2: " + SlipVerificationDataService.ref2)
+                list.add("Ref3: " + SlipVerificationDataService.ref3)
+
+                slipVerificationAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+                var listView: ListView = this.findViewById(R.id.slipVerificationListView)
+                listView.adapter = slipVerificationAdapter
+
+                /*val titleView: TextView = TextView
+                listView.addHeaderView()*/
                 enableSpinner(false)
             } else {
                 errorToast()
