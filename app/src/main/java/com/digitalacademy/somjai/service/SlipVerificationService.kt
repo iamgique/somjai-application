@@ -15,8 +15,7 @@ object SlipVerificationService {
         val pureTransaction = transaction.takeLast(37).take(23)
         val slipVerificationRequest = object: JsonObjectRequest(Method.GET, "$URL_SLIP_VERIFICATION${pureTransaction}?sendingBank=014", null, Response.Listener { response ->
             try {
-                var gson = Gson()
-                var resp = gson?.fromJson(response.getJSONObject("data").toString(), SlipVerificationModel.SlipVerificationInfo::class.java)
+                var resp = Gson().fromJson(response.getJSONObject("data").toString(), SlipVerificationModel.SlipVerificationInfo::class.java)
                 SlipVerificationDataService.transRef = resp.transRef
                 SlipVerificationDataService.sendingBank = resp.sendingBank
                 SlipVerificationDataService.receivingBank = resp.receivingBank

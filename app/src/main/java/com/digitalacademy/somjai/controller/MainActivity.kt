@@ -106,8 +106,7 @@ class MainActivity : AppCompatActivity() {
         if (App.prefs.isLoggedIn) {
             runOnUiThread {
                 if(args != null) {
-                    var gson = Gson()
-                    var resp = gson?.fromJson(args[0].toString(), PaymentConfirmModel.PaymentConfirmInfo::class.java)
+                    var resp = Gson().fromJson(args[0].toString(), PaymentConfirmModel.PaymentConfirmInfo::class.java)
                     Log.d("onPaymentSucceed", resp.toString())
 
                     val builder: AlertDialog.Builder? = this.let { AlertDialog.Builder(it) }
