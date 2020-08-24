@@ -59,7 +59,7 @@
         android:layout_marginEnd="8dp"
         android:background="@color/cardview_dark_background"
         android:onClick="generateMyPromptQRBtnClicked"
-        android:text="Generate My Promp QR"
+        android:text="Payment"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
