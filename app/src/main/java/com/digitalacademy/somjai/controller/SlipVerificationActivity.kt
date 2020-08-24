@@ -1,13 +1,9 @@
 package com.digitalacademy.somjai.controller
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Html
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.digitalacademy.somjai.R
@@ -19,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_slip_verification.*
 class SlipVerificationActivity : AppCompatActivity() {
 
     lateinit var slipVerificationAdapter: ArrayAdapter<String>
-    //lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +63,6 @@ class SlipVerificationActivity : AppCompatActivity() {
                 var listView: ListView = this.findViewById(R.id.slipVerificationListView)
                 listView.adapter = slipVerificationAdapter
 
-                /*val titleView: TextView = TextView
-                listView.addHeaderView()*/
                 enableSpinner(false)
             } else {
                 errorToast()
@@ -90,13 +83,5 @@ class SlipVerificationActivity : AppCompatActivity() {
             slipVerificationSpinner.visibility = View.INVISIBLE
         }
         //loginLoginBtn.isEnabled = !enable
-    }
-
-    fun hideKeyboard() {
-        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        if(inputManager.isAcceptingText) {
-            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        }
     }
 }

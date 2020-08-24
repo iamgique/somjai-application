@@ -19,9 +19,9 @@
 
     <fragment
         android:id="@+id/nav_my_prompt"
-        android:name="com.digitalacademy.somjai.ui.payment.PaymentFragment"
+        android:name="com.digitalacademy.somjai.ui.myPromptQR.MyPromptQRFragment"
         android:label="@string/menu_my_prompt"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_my_prompt_qr" />
 
     <fragment
         android:id="@+id/nav_slip_verification"
