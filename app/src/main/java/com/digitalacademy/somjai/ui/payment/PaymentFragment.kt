@@ -61,7 +61,7 @@ class PaymentFragment : Fragment(), View.OnClickListener {
         hideKeyboard()
 
         val amount = amountTxt.text.toString()
-        val ref = refTxt.text.toString().toUpperCase()
+        val ref = refTxt.text.toString().trim().toUpperCase()
 
         when(view.id) {
             R.id.generatePaymentBtn -> checkGeneratePayment(amount, ref) { canGenerate ->
