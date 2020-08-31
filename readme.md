@@ -24,3 +24,5 @@ This project is an android application using for demo SCB Open API.
 - Run application
 -- Setting and choose device
 -- Run 'app' button 
+
+-- https://developer.android.com/guide/topics/manifest/uses-sdk-element
