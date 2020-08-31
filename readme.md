@@ -15,14 +15,14 @@ This project is an android application using for demo SCB Open API.
 - Generate MyPrompt QR
 
 ## How to run
-- Using android studio
--- Go to AVD Manager
--- Create Virtual Device
--- Choose category such as Mobile, Tablet or other
--- Choose android version
---- This project support android 4.4 or above (minSdkVersion 19) 
-- Run application
--- Setting and choose device
--- Run 'app' button 
+### Using android studio
+#### Go to AVD Manager
+#### Create Virtual Device
+#### Choose category such as Mobile, Tablet or other
+#### Choose android version
+##### This project support android 4.4 or above (minSdkVersion 19) 
+### Run application
+#### Setting and choose device
+#### Run 'app' button 
 
--- https://developer.android.com/guide/topics/manifest/uses-sdk-element
+### https://developer.android.com/guide/topics/manifest/uses-sdk-element
